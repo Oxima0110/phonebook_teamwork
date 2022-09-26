@@ -1,6 +1,4 @@
-col = {}
-col[1] = 'Иван'
+import controller as c
 
-col[1] = 'Василий'
-print(col)
+c.button_click()
 
