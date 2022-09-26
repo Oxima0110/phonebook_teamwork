@@ -9,7 +9,8 @@ def button_click():
         1 - добавление записи в телефонную книгу
         2 - поиск записи в телефонной книге
         3 - просмотр телефонной книги
-        4 - выход
+        4 - запись в json
+        5 - выход
         ''')
         action = int(ui.get_action(':'))
         if action == 1:
@@ -21,6 +22,8 @@ def button_click():
         elif action == 3:
             result = o.read_csv()
             ui.view_data(result)
+        elif action == 4:
+            o.write_json()  
         else:
             break
            

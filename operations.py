@@ -1,6 +1,7 @@
-
+import json
 import csv
 import user_interface as ui
+
 
 def read_csv():
     '''
@@ -14,6 +15,7 @@ def read_csv():
             file_reader.append(line)
         return file_reader
 
+
 def write_csv():
     '''
     Запись в csv фаил
@@ -25,9 +27,10 @@ def write_csv():
     lst.append(text)
     text = ui.get_action('Комментари: ')
     lst.append(text)
-    with open ('data.csv', mode = 'a', encoding='utf-8') as w_file:
+    with open('data.csv', mode='a', encoding='utf-8') as w_file:
         file_writer = csv.writer(w_file, delimiter='\n', lineterminator='\r')
         file_writer.writerow(lst)
+
 
 def write_txt():
     '''
@@ -41,7 +44,7 @@ def write_txt():
     text = ui.get_action('Комментари: ')
     lst.append(text)
     with open('data.txt', "a", encoding='utf-8') as file:
-        for  line in lst:
+        for line in lst:
             file.write(line + ' ')
         file.write('\n')
 
@@ -55,7 +58,8 @@ def read_txt():
             file_reader.append(line)
     return file_reader
 
-def search(lst_input: list)-> list:
+
+def search(lst_input: list) -> list:
     '''
     Поиск в телефонной книге
     '''
@@ -65,3 +69,16 @@ def search(lst_input: list)-> list:
         if text in line:
             line_output.append(line)
     return line_output
+
+
+def write_json():
+    data = []
+    text = ui.get_action('Фамилия Имя: ')
+    data.append(text)
+    text = ui.get_action('Номер телефона: ')
+    data.append(text)
+    text = ui.get_action('Комментари: ')
+    data.append(text)
+    with open('data.json', 'w') as fp:
+        json.dump(data, fp, separators=('\n',' '), indent=4)
+        
