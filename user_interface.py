@@ -2,14 +2,14 @@
 import check as ch
 
 
-def view_data(lst_input: list) -> str: #показать телефонную книгу
+def view_all_contact(lst_input: list) -> str: #показать телефонную книгу
     '''
     Вывод информации пользователю
     '''
     for line in lst_input:
         print(line)
 
-def get_contact(): #добавить контакт
+def add_contact(): #добавить контакт
     contact = []
     text = ch.get_number_int(get_action('Фамилия: '))
     contact.append(text)
@@ -21,11 +21,14 @@ def get_contact(): #добавить контакт
     contact.append(text)
     return contact
 
+def delete_contact(): 
+    pass
 
+def edit_contact():
+        pass        
 
-
-
-
+def search_contact():
+    pass
 
 def get_choice(input_string: str) -> str:
     '''

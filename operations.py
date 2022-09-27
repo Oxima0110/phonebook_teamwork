@@ -1,45 +1,58 @@
-#Сергей
+# Сергей
 import json
 import csv
-import user_interface as ui
+from typing import List
 
 
 def read_csv():
     '''
     Чтение из файла csv
     '''
-    with open('data.csv', encoding='utf-8') as r_file:
-        file_reader_1 = csv.reader(r_file, delimiter=' ')
-        file_reader = []
-        for line in file_reader_1:
+    with open('data.csv', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter=' ')
+        contact_list = []
+        for line in reader:
             line = ' '.join(line)
-            file_reader.append(line)
-        return file_reader
+            contact_list.append(line)
+        return contact_list
 
 
-def write_csv():
+def write_csv(contact: List, mode_type) -> None:
     '''
-    Запись в csv фаил
+    Запись в csv фаил. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
     '''
-    contact = ui.get_contact()
-    with open('data.csv', mode='a', encoding='utf-8') as w_file:
-        file_writer = csv.writer(w_file, delimiter=' ', lineterminator='\r')
-        file_writer.writerow(contact)
+    with open('data.csv', mode=mode_type, encoding='utf-8', newline='') as f:
+        writer = csv.writer(f, delimiter=' ')
+        writer.writerow(contact)
+        
 
-
-def search(lst_input: list) -> list:
+def search_contact(searchstring: str) -> list:
     '''
     Поиск в телефонной книге
     '''
-    text = ui.get_action('Введите значение для поиска: ')
-    line_output = []
-    for line in lst_input:
-        if text in line:
-            line_output.append(line)
-    return line_output
+    contact_list = read_csv()
+    searched_contact = []
+    for contact in contact_list:
+        if searchstring in contact:
+            searched_contact.append(contact)
+    return searched_contact
 
 
-def write_json(list:list):
-    with open('data.json', 'w') as fp:
-        json.dump(list, fp, separators=('\n',' '), indent=4)
-        
+
+def delete_contact(searchstring: str) -> None:
+    '''
+    Ищем контакт и удаляем его из списка. Перезаписываем файл
+    '''
+    contact_list = read_csv()
+    for contact in contact_list:
+        if searchstring in contact:
+            contact_list.remove(contact)
+    write_csv(contact_list, 'w')
+
+
+
+
+
+# def write_json(list: list):
+#     with open('data.json', 'w') as fp:
+#         json.dump(list, fp, separators=('\n', ' '), indent=4)
