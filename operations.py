@@ -19,12 +19,12 @@ def read_csv():
 
 def write_csv(contact: List, mode_type) -> None:
     '''
-    Запись в csv фаил. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
+    Запись в csv фаил. Добавляем контакт. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
     '''
     with open('data.csv', mode=mode_type, encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=' ')
         writer.writerow(contact)
-        
+
 
 def search_contact(searchstring: str) -> list:
     '''
@@ -38,6 +38,18 @@ def search_contact(searchstring: str) -> list:
     return searched_contact
 
 
+def edit_contact(searchstring: str, change_value: str) -> None:
+    '''
+    Редактирование контакта. На вход метод принимает поисковую строку для контакта и измененную строку. 
+    После перезаписываем файл с новыми измененниям
+    '''
+    contact_list = read_csv()
+    for contact in contact_list:
+        if searchstring in contact:
+            index = contact_list.index(contact)
+            contact_list[index] = change_value
+    write_csv(contact_list, 'w')
+
 
 def delete_contact(searchstring: str) -> None:
     '''
@@ -48,9 +60,6 @@ def delete_contact(searchstring: str) -> None:
         if searchstring in contact:
             contact_list.remove(contact)
     write_csv(contact_list, 'w')
-
-
-
 
 
 # def write_json(list: list):
