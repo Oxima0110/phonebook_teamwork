@@ -1,3 +1,4 @@
+#Денис
 import operations as o
 import user_interface as ui
 
@@ -7,7 +8,10 @@ def button_click():
        menu = ui.show_menu()
        choice = ui.get_choice(menu)
        if choice == 1:
-            o.write_csv()
+              
+            list = ui.get_contact   
+            o.write_csv(list)
+            o.write_json(list)
        elif choice == 2:
             lst = o.read_csv()
             result = o.search(lst)

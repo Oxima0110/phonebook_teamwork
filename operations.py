@@ -1,3 +1,4 @@
+#Сергей
 import json
 import csv
 import user_interface as ui
@@ -22,7 +23,7 @@ def write_csv():
     '''
     contact = ui.get_contact()
     with open('data.csv', mode='a', encoding='utf-8') as w_file:
-        file_writer = csv.writer(w_file, delimiter='\n', lineterminator='\r')
+        file_writer = csv.writer(w_file, delimiter=' ', lineterminator='\r')
         file_writer.writerow(contact)
 
 
@@ -38,14 +39,7 @@ def search(lst_input: list) -> list:
     return line_output
 
 
-def write_json():
-    data = []
-    text = ui.get_action('Фамилия Имя: ')
-    data.append(text)
-    text = ui.get_action('Номер телефона: ')
-    data.append(text)
-    text = ui.get_action('Комментари: ')
-    data.append(text)
+def write_json(list:list):
     with open('data.json', 'w') as fp:
-        json.dump(data, fp, separators=('\n',' '), indent=4)
+        json.dump(list, fp, separators=('\n',' '), indent=4)
         

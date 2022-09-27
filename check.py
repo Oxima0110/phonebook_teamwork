@@ -1,3 +1,4 @@
+#Андрей
 def get_number_int(input_string: str) -> int:
     '''
     Проверка целого числа
