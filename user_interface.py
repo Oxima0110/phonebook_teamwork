@@ -59,7 +59,7 @@ def get_action(input_string: str) -> str:
     return input(input_string)    
 
 
-def show_menu():
+def show_menu()-> None:
     return ('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
       f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
@@ -75,7 +75,7 @@ def search_contact_user():
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите значение для поиска ->: {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL) 
 
-def menu_search():
+def menu_search()-> None:
     '''
     Меню функции поиска
     '''
@@ -87,6 +87,10 @@ def menu_search():
       ' 3 -🔙  <Выйти в главное меню> \n'
       f' ➡ : {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     
-def edit_contact():
-    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+def edit_user_contact(searchstring: str) -> None:
+    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите обнавлённые данные о контакте {searchstring} ↓ {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+    print(Style.RESET_ALL)
+    
+def delete_user_contact(searchstring: str) -> None:
+    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Контакт {searchstring} удалён{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)
