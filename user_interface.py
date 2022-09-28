@@ -26,7 +26,7 @@ def view_all_contact(lst_input: list) -> str: #показать телефонн
 
 def get_contact(): #добавить контакт
     print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
-=======
+
 def add_contact(): #добавить контакт
 
     contact = []
