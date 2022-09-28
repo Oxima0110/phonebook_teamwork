@@ -15,7 +15,7 @@ def farewell_user():
     print(f'{Fore.YELLOW + Style.BRIGHT}До новых встреч 👋{Style.RESET_ALL}')
 
 
-def view_all_contact(lst_input: list) -> str: #показать телефонную книгу
+def view_data(lst_input: list) -> str: #показать телефонную книгу
     '''
     Вывод информации пользователю
     '''
@@ -23,12 +23,8 @@ def view_all_contact(lst_input: list) -> str: #показать телефонн
     for line in lst_input:
         print(line)
 
-
 def get_contact(): #добавить контакт
     print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
-=======
-def add_contact(): #добавить контакт
-
     contact = []
     print(Fore.CYAN + Style.BRIGHT)
     text = get_action(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
@@ -45,16 +41,6 @@ def add_contact(): #добавить контакт
     print(f'\n{Fore.GREEN}✅ Контакт успешно добавлен {Style.RESET_ALL}')
     print(Style.RESET_ALL)
     return contact
-
-def delete_contact(): 
-    pass
-
-
-def edit_contact():
-        pass        
-
-def search_contact():
-    pass
 
 
 def get_choice(input_string: str) -> str:
@@ -73,8 +59,8 @@ def get_action(input_string: str) -> str:
     return input(input_string)    
 
 
-def show_menu():
-    print('\n'
+def show_menu()-> None:
+    return ('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
       f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
       ' 1 -📲 <добавление записи в телефонную книгу> \n'
@@ -83,10 +69,28 @@ def show_menu():
       ' 4 -✍  <запись в json> \n'
       ' 5 -👋 <выход> \n'
       f' ➡ : {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
-    print(Style.RESET_ALL)
     
       
-# def search_contact_user():
-#     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите значение для поиска ->: {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
-#     print(Style.RESET_ALL) 
+def search_contact_user():
+    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите значение для поиска ->: {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+    print(Style.RESET_ALL) 
 
+def menu_search()-> None:
+    '''
+    Меню функции поиска
+    '''
+    return ('\n'
+      f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
+      f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
+      ' 1 -✍  <Редактировать контакт> \n'
+      ' 2 -❌ <Удалить контакт> \n'
+      ' 3 -🔙  <Выйти в главное меню> \n'
+      f' ➡ : {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    
+def edit_user_contact(searchstring: str) -> None:
+    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите обнавлённые данные о контакте {searchstring} ↓ {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+    print(Style.RESET_ALL)
+    
+def delete_user_contact(searchstring: str) -> None:
+    print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Контакт {searchstring} удалён{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+    print(Style.RESET_ALL)

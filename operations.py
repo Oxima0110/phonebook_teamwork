@@ -4,6 +4,7 @@ import csv
 from typing import List
 
 
+
 def read_csv():
     '''
     Чтение из файла csv
@@ -60,6 +61,7 @@ def delete_contact(searchstring: str) -> None:
         if searchstring in contact:
             contact_list.remove(contact)
     write_csv(contact_list, 'w')
+    
 
 
 def write_json(contact: List)->None:
