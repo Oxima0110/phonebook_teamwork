@@ -1,12 +1,15 @@
+# Сергей
 import json
 import csv
-import user_interface as ui
+from typing import List
+
 
 
 def read_csv():
     '''
     Чтение из файла csv
     '''
+
     with open('D:\MyD\LocalDisc\Programmirovanie\Гикбрейнс\PraktikaPyton\Semminar2\Semmin_phome\phonebook_teamwork\data.csv', encoding='utf-8') as r_file:
         file_reader_1 = csv.reader(r_file, delimiter=' ')
         file_reader = []
@@ -16,21 +19,30 @@ def read_csv():
             #r_file.close
         return file_reader
 
+    with open('data.csv', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter=' ')
+        contact_list = []
+        for line in reader:
+            line = ' '.join(line)
+            contact_list.append(line)
+        return contact_list
 
-def write_csv():
+
+
+def write_csv(contact: List, mode_type) -> None:
     '''
-    Запись в csv фаил
+    Запись в csv фаил. Этот же метод добавляет контакт. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
     '''
-    contact = ui.get_contact()
-    with open('data.csv', mode='a', encoding='utf-8') as w_file:
-        file_writer = csv.writer(w_file, delimiter='\n', lineterminator='\r')
-        file_writer.writerow(contact)
+    with open('data.csv', mode=mode_type, encoding='utf-8', newline='') as f:
+        writer = csv.writer(f, delimiter=' ')
+        writer.writerow(contact)
 
 
-def search(lst_input: list) -> list:
+def search_contact(searchstring: str) -> list:
     '''
     Поиск в телефонной книге
     '''
+
     text = ui.get_action('Введите значение для поиска: ')
     line_output = []
     for line in lst_input:
@@ -51,3 +63,68 @@ def write_json():
         json.dump(data, fp, separators=('\n',' '), indent=4)
          
         
+
+    contact_list = read_csv()
+    searched_contact = []
+    for contact in contact_list:
+        if searchstring in contact:
+            searched_contact.append(contact)
+    return searched_contact
+
+
+def edit_contact(searchstring: str, new_contact: List) -> None:
+    '''
+    Редактирование контакта. На вход метод принимает поисковую строку для контакта и измененную строку. 
+    После перезаписываем файл с новыми измененниям
+    '''
+    contact_list = read_csv()
+    for contact in contact_list:
+        if searchstring in contact:
+            index = contact_list.index(contact)
+            contact_list[index] = new_contact
+    write_csv(contact_list, 'w')
+
+
+def delete_contact(searchstring: str) -> None:
+    '''
+    Ищем контакт и удаляем его из списка. Перезаписываем файл
+    '''
+    contact_list = read_csv()
+    for contact in contact_list:
+        if searchstring in contact:
+            contact_list.remove(contact)
+    write_csv(contact_list, 'w')
+    
+
+
+def write_json(contact: List)->None:
+    '''
+    Вызвать метод для первой записи в файле
+    '''
+    with open('data.json', 'w', encoding='utf-8') as rf:
+        json.dump(contact, rf, ensure_ascii=False)
+
+
+def add_contact_json(contact: List)->None:
+    '''
+    Добавление новых контактов после записи первого
+    '''
+    data = read_json()
+    data.append(contact)
+    write_json(data)
+
+
+def read_json()->List:
+    '''
+    Чтение с json
+    '''
+    with open('data.json', 'r', encoding='utf-8') as rf:
+        data = json.load(rf)
+    return data
+
+
+# contact = ['Максим Иванов 5677 друг']
+# add_contact_json(contact)
+
+# read_json()
+
