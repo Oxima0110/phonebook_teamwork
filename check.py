@@ -7,6 +7,7 @@ def get_number_int(input_string: str) -> int:
         try:
             num = input(input_string)
             num = int(num)
+            num = str(num)
             return num
         except ValueError:
             print('Это не то ...')
