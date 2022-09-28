@@ -29,17 +29,24 @@ def show_menu():
     return 'Выберите нужное действие: \n1 - добавление записи в телефонную книгу: \n2 - поиск записи в телефонной книге: \n3 - просмотр телефонной книги: \n4 - запись в json: \n5 - выход: '
 
 def get_contact():
+    print('Введите данные')
     contact = []
-    text = get_action('Фамилия: ')
-    contact.append(text)
+    text = get_action('Фамилия : ')
+    contact.append(f'Фамилия : {text}' )
     text = get_action('Имя: ')
-    contact.append(text)
+    contact.append(f'Имя : {text}')
     text = get_action('Номер телефона: ')
-    contact.append(text)
+    contact.append(f'Номер телефона : {text}')
     text = get_action('Комментарий: ')
-    contact.append(text)
+    contact.append(f'Комментарий : {text}' )
     return contact
+
+
+def greetings_user():
+    print('Введите свои данные')
+
+def farewell_user():
+    print('Спасибо, до свиданья')
     
-    
-print(get_contact )    
+  
     

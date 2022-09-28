@@ -7,12 +7,13 @@ def read_csv():
     '''
     Чтение из файла csv
     '''
-    with open('data.csv', encoding='utf-8') as r_file:
+    with open('D:\MyD\LocalDisc\Programmirovanie\Гикбрейнс\PraktikaPyton\Semminar2\Semmin_phome\phonebook_teamwork\data.csv', encoding='utf-8') as r_file:
         file_reader_1 = csv.reader(r_file, delimiter=' ')
         file_reader = []
         for line in file_reader_1:
             line = ' '.join(line)
             file_reader.append(line)
+            #r_file.close
         return file_reader
 
 
@@ -41,11 +42,12 @@ def search(lst_input: list) -> list:
 def write_json():
     data = []
     text = ui.get_action('Фамилия Имя: ')
-    data.append(text)
+    data.append(f'Фамилия Имя: {text}')
     text = ui.get_action('Номер телефона: ')
     data.append(text)
     text = ui.get_action('Комментари: ')
     data.append(text)
     with open('data.json', 'w') as fp:
         json.dump(data, fp, separators=('\n',' '), indent=4)
+         
         
