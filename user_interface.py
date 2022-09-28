@@ -60,7 +60,7 @@ def get_action(input_string: str) -> str:
 
 
 def show_menu():
-    return ('\n'
+    print('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
       f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
       ' 1 -📲 <добавление записи в телефонную книгу> \n'
@@ -69,6 +69,7 @@ def show_menu():
       ' 4 -✍  <запись в json> \n'
       ' 5 -👋 <выход> \n'
       f' ➡ : {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    print(Style.RESET_ALL)
     
       
 # def search_contact_user():
