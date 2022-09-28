@@ -19,7 +19,7 @@ def read_csv():
 
 def write_csv(contact: List, mode_type) -> None:
     '''
-    Запись в csv фаил. Добавляем контакт. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
+    Запись в csv фаил. Этот же метод добавляет контакт. На дозвпись в файл mode_type = 'а', на перезапись файла = 'w'
     '''
     with open('data.csv', mode=mode_type, encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter=' ')
@@ -38,7 +38,7 @@ def search_contact(searchstring: str) -> list:
     return searched_contact
 
 
-def edit_contact(searchstring: str, change_value: str) -> None:
+def edit_contact(searchstring: str, new_contact: List) -> None:
     '''
     Редактирование контакта. На вход метод принимает поисковую строку для контакта и измененную строку. 
     После перезаписываем файл с новыми измененниям
@@ -47,7 +47,7 @@ def edit_contact(searchstring: str, change_value: str) -> None:
     for contact in contact_list:
         if searchstring in contact:
             index = contact_list.index(contact)
-            contact_list[index] = change_value
+            contact_list[index] = new_contact
     write_csv(contact_list, 'w')
 
 
@@ -62,6 +62,33 @@ def delete_contact(searchstring: str) -> None:
     write_csv(contact_list, 'w')
 
 
-# def write_json(list: list):
-#     with open('data.json', 'w') as fp:
-#         json.dump(list, fp, separators=('\n', ' '), indent=4)
+def write_json(contact: List)->None:
+    '''
+    Вызвать метод для первой записи в файле
+    '''
+    with open('data.json', 'w', encoding='utf-8') as rf:
+        json.dump(contact, rf, ensure_ascii=False)
+
+
+def add_contact_json(contact: List)->None:
+    '''
+    Добавление новых контактов после записи первого
+    '''
+    data = read_json()
+    data.append(contact)
+    write_json(data)
+
+
+def read_json()->List:
+    '''
+    Чтение с json
+    '''
+    with open('data.json', 'r', encoding='utf-8') as rf:
+        data = json.load(rf)
+    return data
+
+
+# contact = ['Максим Иванов 5677 друг']
+# add_contact_json(contact)
+
+# read_json()
