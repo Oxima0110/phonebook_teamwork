@@ -93,7 +93,7 @@ def get_phone_number(input_string: str) -> str:
     while True:
         try:
             num = input(input_string)
-            if len(num) < 11:
+            if len(num) < 12:
                 if len(num) != 0:
                     num = int(num)
                     return str(num)
