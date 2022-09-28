@@ -24,11 +24,12 @@ def view_all_contact(lst_input: list) -> str: #показать телефонн
         print(line)
 
 
-def get_contact(): #добавить контакт
-    print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
-=======
-def add_contact(): #добавить контакт
+def get_contact():
+    '''
+    Добавляет контакт в список
+    '''
 
+    print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
     contact = []
     print(Fore.CYAN + Style.BRIGHT)
     text = get_action(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
@@ -60,7 +61,6 @@ def search_contact():
 def get_choice(input_string: str) -> str:
     '''
     Ввод выбора действия пользователя
-
     '''
     choise = ch.get_selection(input_string)
     return choise
@@ -74,6 +74,9 @@ def get_action(input_string: str) -> str:
 
 
 def show_menu():
+    '''
+    Выводит меню пользователя
+    '''
     print('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
       f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
@@ -89,4 +92,3 @@ def show_menu():
 # def search_contact_user():
 #     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите значение для поиска ->: {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
 #     print(Style.RESET_ALL) 
-
