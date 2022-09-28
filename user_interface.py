@@ -15,7 +15,7 @@ def farewell_user():
     print(f'{Fore.YELLOW + Style.BRIGHT}До новых встреч 👋{Style.RESET_ALL}')
 
 
-def view_data(lst_input: list) -> str: #показать телефонную книгу
+def view_all_contact(lst_input: list) -> str: #показать телефонную книгу
     '''
     Вывод информации пользователю
     '''
@@ -23,8 +23,12 @@ def view_data(lst_input: list) -> str: #показать телефонную к
     for line in lst_input:
         print(line)
 
+
 def get_contact(): #добавить контакт
     print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
+=======
+def add_contact(): #добавить контакт
+
     contact = []
     print(Fore.CYAN + Style.BRIGHT)
     text = get_action(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
@@ -41,6 +45,16 @@ def get_contact(): #добавить контакт
     print(f'\n{Fore.GREEN}✅ Контакт успешно добавлен {Style.RESET_ALL}')
     print(Style.RESET_ALL)
     return contact
+
+def delete_contact(): 
+    pass
+
+
+def edit_contact():
+        pass        
+
+def search_contact():
+    pass
 
 
 def get_choice(input_string: str) -> str:
