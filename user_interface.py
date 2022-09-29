@@ -1,6 +1,6 @@
 #Саша
 import check as ch
-from colorama import Fore, Back, Style
+from colorama import Fore, Back, Style 
 
 def greetings_user():
     '''
@@ -30,15 +30,15 @@ def get_contact(): #добавить контакт
 def add_contact(): #добавить контакт
     contact = []
     print(Fore.CYAN + Style.BRIGHT)
-    text = get_action(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    text =ch.get_name(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     text = text.capitalize()
     contact.append(text)
-    text = get_action(f'{Fore.CYAN + Style.BRIGHT}-> Фамилия: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    text = ch.get_surname(f'{Fore.CYAN + Style.BRIGHT}-> Фамилия: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     text = text.capitalize()
     contact.append(text)
-    text = get_action(f'{Fore.CYAN + Style.BRIGHT}-> Номер телефона: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    text = ch.get_phone_number(f'{Fore.CYAN + Style.BRIGHT}-> Номер телефона: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     contact.append(text)
-    text = get_action(f'{Fore.CYAN + Style.BRIGHT}-> Комментарий: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
+    text = ch.get_comment(f'{Fore.CYAN + Style.BRIGHT}-> Комментарий: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     text = text.capitalize()
     contact.append(text)
     print(f'\n{Fore.GREEN}✅ Контакт успешно добавлен {Style.RESET_ALL}')

@@ -12,7 +12,6 @@ def button_click():
         if choice == 1:
             contact = ui.add_contact()
             o.add_contact_csv(contact)
-            o.write_json(contact)
         elif choice == 2:
             searchstring = ui.get_action('Введите данные для поиска: ')
             searched_contact = o.search_contact(searchstring)
