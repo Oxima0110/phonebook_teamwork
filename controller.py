@@ -11,7 +11,7 @@ def button_click():
         choice = ui.get_choice(menu)
         if choice == 1:
             contact = ui.add_contact()
-            o.write_csv(contact, 'a')
+            o.add_contact_csv(contact)
             o.write_json(contact)
         elif choice == 2:
             searchstring = ui.get_action('Введите данные для поиска: ')
@@ -23,7 +23,7 @@ def button_click():
                     if choice == 1:
                          ui.edit_user_contact(searchstring)
                          contact = ui.add_contact()
-                         o.edit_contact(searchstring, searched_contact)
+                         o.edit_contact(searchstring, contact)
                     elif choice == 2:
                          o.delete_contact(searchstring)
                          ui.delete_user_contact(searchstring)
