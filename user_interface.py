@@ -167,17 +167,17 @@ def delete_user_contact(searchstring: str) -> None:
     print(Style.RESET_ALL)
 
 def message_read_csv() -> None:
-     '''
+    '''
      Инфо сообщение о прочтении даннных
     
-     '''
+    '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Данные прочитаны. Просмотрите вашу записную книгу.{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)    
 
 def message_write_csv() -> None:
-     '''
+    '''
      Инфо сообщение о записи данных
     
-     '''
+    '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Данные записаны{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)
