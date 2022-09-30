@@ -1,6 +1,7 @@
 #Саша
 import check as ch
 from colorama import Fore, Back, Style 
+import logger as log
 
 def greetings_user():
     '''
@@ -43,6 +44,7 @@ def add_contact(): #добавить контакт
     contact.append(text)
     print(f'\n{Fore.GREEN}✅ Контакт успешно добавлен {Style.RESET_ALL}')
     print(Style.RESET_ALL)
+    log.add_contact_logger(contact)
     return contact
 
 
@@ -52,6 +54,7 @@ def get_choice(input_string: str) -> str:
 
     '''
     choise = ch.get_selection(input_string)
+    log.get_choice_logger(choise)
     return choise
 
 def get_action(input_string: str) -> str:
