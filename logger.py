@@ -4,43 +4,16 @@ from typing import List
 
 def get_choice_logger(choise):
     time = dt.now().strftime('%D:%M:%H:%M')
-    while True:
-        if choise == 1:
-            with open('log.csv', 'a',encoding='utf-8') as file : 
-                file.write('{}; добавлен контакт ; {}\n'
-                    .format(time, choise))
+    with open('log.log', 'a',encoding='utf-8') as file : 
+            file.write('{};- user нажал цифру ; {}\n'
+                .format(time, choise))
 
 def add_contact_logger(contact):
     time = dt.now().strftime('%D:%M:%H:%M')
-    with open('log.csv', 'a',encoding='utf-8') as file : 
+    with open('log.log', 'a',encoding='utf-8') as file : 
         file.write('{}; added_new_contact; {}\n'
                 .format(time, contact))
 
-def edit_contact_logger(searched_contact) -> list:
-    time = dt.now().strftime('%D:%M:%H:%M')
-    with open('log.csv', 'a', encoding='utf-8') as file:
-        file.write('{}; searched_contact; {}\n'
-                .format(time, searched_contact))
-
-# def view_data_logger(line):
-#     time = dt.now().strftime('%D:%M:%H:%M')
-# with open('log.csv', 'a',encoding='utf-8') as file :
-#         file.write('{}; choice; {}\n'
-#             .format(time, line))
-# 
-#def add_contact_logger(contact):
-#    time = dt.now().strftime('%D:%M:%H:%M')
-#    with open('log.csv', 'a',encoding='utf-8') as file : 
-#        file.write('{}; added_new_contact; {}\n'
-#                .format(time, contact))
-#
-#def edit_contact_logger(searched_contact) -> list:
-#    time = dt.now().strftime('%D:%M:%H:%M')
-#    with open('log.csv', 'a', encoding='utf-8') as file:
-#        file.write('{}; searched_contact; {}\n'
-#                .format(time, searched_contact))
-#
-#
 #def get_choice_logger(choise):
 #    time = dt.now().strftime('%D:%M:%H:%M')
 #    while True:
@@ -77,27 +50,3 @@ def edit_contact_logger(searched_contact) -> list:
 #                    .format(time, choise))
 #        else:
 #            break
-
-# def view_data_logger(line):
-#     time = dt.now().strftime('%D:%M:%H:%M')
-# with open('log.csv', 'a',encoding='utf-8') as file :
-#         file.write('{}; choice; {}\n'
-#             .format(time, line))
-# 
-def add_contact_logger(contact):
-    time = dt.now().strftime('%D:%M:%H:%M')
-    with open('log.csv', 'a',encoding='utf-8') as file : 
-        file.write('{}; added_new_contact; {}\n'
-                .format(time, contact))
-
-def edit_contact_logger(searched_contact) -> list:
-    time = dt.now().strftime('%D:%M:%H:%M')
-    with open('log.csv', 'a', encoding='utf-8') as file:
-        file.write('{}; searched_contact; {}\n'
-                .format(time, searched_contact))
-# def add_logger(data):
-#     time = dt.now().strftime('%H:%M')
-#     with open('log.csv', 'a') as file:
-#         file.write('{}; temperature; {}\n'
-#                 .format(time, data))
-# 
