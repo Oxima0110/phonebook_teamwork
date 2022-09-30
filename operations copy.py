@@ -21,25 +21,25 @@ def search_contact(searchstring: str) -> list:
     '''
     Поиск в телефонной книге
     '''
-    searched_contact = {}
+    searched_contact = []
     for contact in contact_list:
         if searchstring in contact:
-           searched_contact[contact_list.index(contact)] = contact
-    return searched_contact
-#list_l = [(1 ,['asdd','dsd','sdsd','sdsd'])]  
+           print(contact)
+
+list_l = [(1 ,['asdd','dsd','sdsd','sdsd'])]  
 
 
 def select_contact(choice, searched_contacts):
-    for key, value in searched_contacts.items():
-        if choice == key:
-            return key, value    
+    for search_contact in searched_contacts:
+        if choice == searched_contacts[0]:
+            return search_contact    
 #print(select_contact(1, list_l))
 
 def delete_contact(contact: str) -> None:
     '''
     Ищем контакт и удаляем его из списка. Перезаписываем файл
     '''
-    contact_list.remove(contact_list[contact])
+    contact_list.remove(contact)
 
 
 def edit_contact(index, value) -> None:
