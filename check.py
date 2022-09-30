@@ -1,5 +1,6 @@
 # Андрей
 import csv
+
 def get_number_int(input_string: str) -> int:
     '''
     Проверка целого числа
@@ -8,7 +9,6 @@ def get_number_int(input_string: str) -> int:
         try:
             num = input(input_string)
             num = int(num)
-            num = str(num)
             return num
         except ValueError:
             print('Это не то ...')
@@ -37,8 +37,23 @@ def get_selection(input_string: str) -> int:
     while True:
         try:
             char = input(input_string)
-            if char in '12345':
+            if char in '1234567':
                 return int(char)
+            print('Не правильно!')
+            continue
+        except ValueError:
+            print('Это не то ...')
+
+def get_selection_contact(input_string:str, searched_list) ->str:
+    '''
+    Проверка пользовательского ввода для выбора контакта из поиска
+    '''            
+    while True:
+        try:
+            choice = int(input(input_string))
+            for key in searched_list:
+                if choice == key:
+                    return choice
             print('Не правильно!')
             continue
         except ValueError:
