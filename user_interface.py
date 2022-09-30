@@ -6,12 +6,14 @@ from colorama import Fore, Back, Style
 def greetings_user():
     '''
     Приветсвует пользователя
+    
     '''
     print(f'{Fore.YELLOW + Style.BRIGHT}Добро пожаловать в телефонную записную книжку 📙 {Style.RESET_ALL}')
     
 def farewell_user():
     '''
     Прощание с пользователем
+    
     '''
     print(f'{Fore.YELLOW + Style.BRIGHT}До новых встреч 👋{Style.RESET_ALL}')
 
@@ -19,6 +21,7 @@ def farewell_user():
 def view_data(lst_input: list) -> str: #показать телефонную книгу
     '''
     Вывод информации пользователю
+    
     '''
     print(f'\n{Fore.YELLOW + Style.BRIGHT}      <Ваши контакты> ↓ ')
     for line in lst_input:
@@ -26,22 +29,27 @@ def view_data(lst_input: list) -> str: #показать телефонную к
     
 def view_dict(lst_input: list) -> str: #показать телефонную книгу
     '''
-    Вывод информации пользователю
+    Вывод информации пользователю(словарь)
     '''
     print(f'\n{Fore.YELLOW + Style.BRIGHT}      <Ваши контакты> ↓ ')
     for key, value in lst_input.items():
         print(key, value)      
 
 def view_contact(contact:str):
+    '''
+    Вывод информации пользователю(словарь)
+    '''
     print(f'\n{Fore.YELLOW + Style.BRIGHT}      <Ваши контакты> ↓ ')
     print(contact)
 
 
-def get_contact(): #добавить контакт
+
+def add_contact() -> list:
+    '''
+    Добоваляет контакт в спсисок
+    
+    '''
     print(f'{Fore.YELLOW + Style.BRIGHT}Введите данные о контакте ↓ {Style.RESET_ALL}')
-
-
-def add_contact(): #добавить контакт
     contact = []
     print(Fore.CYAN + Style.BRIGHT)
     text =ch.get_name(f'-> Имя: {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
@@ -62,7 +70,7 @@ def add_contact(): #добавить контакт
 
 def get_choice(input_string: str) -> str:
     '''
-    Ввод выбора действия пользователя
+    Ввод выбора пользователя
 
     '''
     choise = ch.get_selection(input_string)
@@ -93,6 +101,10 @@ def get_number(input_string: str) -> str:
 
 
 def show_menu()-> None:
+    '''
+    Выводит основное меню
+    
+    '''
     return ('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
       f'{Style.RESET_ALL + Fore.CYAN + Style.BRIGHT}' 
@@ -107,6 +119,10 @@ def show_menu()-> None:
     
       
 def search_contact_user():
+    '''
+    Выводит сообщение о поиске
+    
+    '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите значение для поиска ->: {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL) 
 
@@ -116,8 +132,8 @@ def select_contact():
 
 def menu_search()-> None:
     '''
-    Меню функции поиска  
-    
+    Меню функции поиска
+   
     '''
     return ('\n'
       f'{Fore.YELLOW + Style.BRIGHT}Выберите нужное действие: ↓{Style.RESET_ALL}\n'
@@ -128,7 +144,13 @@ def menu_search()-> None:
       f' ➡ : {Fore.LIGHTGREEN_EX + Style.BRIGHT}')
     
 def edit_user_contact(searchstring: str) -> None:
+
+    '''
+    Выводит сообщение об изменении контакта
+    
+    '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Введите обновлённые данные о контакте ↓ {Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
+
     print(Style.RESET_ALL)
 
 def change_user_contact(searchstring: str) -> None:
@@ -137,13 +159,25 @@ def change_user_contact(searchstring: str) -> None:
 
     
 def delete_user_contact(searchstring: str) -> None:
+    '''
+    Выводит сообщение об удалении контакта
+    
+    '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Контакт {searchstring} удалён{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)
 
 def message_read_csv() -> None:
+     '''
+     Инфо сообщение о прочтении даннных
+    
+     '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Данные прочитаны. Просмотрите вашу записную книгу.{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)    
 
 def message_write_csv() -> None:
+     '''
+     Инфо сообщение о записи данных
+    
+     '''
     print(get_action(f'{Fore.YELLOW + Style.BRIGHT}Данные записаны{Fore.LIGHTGREEN_EX + Style.BRIGHT}'))
     print(Style.RESET_ALL)
