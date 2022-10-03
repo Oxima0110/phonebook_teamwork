@@ -55,13 +55,16 @@ def read_csv() -> None:
     '''
     Чтение из файла csv
     '''
-
+    
     with open('data.csv', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',')
+        contact =''
         for line in reader:
-
-            contact_list.append(line)
-
+            contact += ' '.join(line)+'\n'
+            #contact_list.append(line)
+    return contact
+# read_csv()
+# print(contact_list)
 
 def write_csv() -> None:
     '''
