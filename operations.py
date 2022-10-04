@@ -1,8 +1,9 @@
 from ast import Dict
-import json
+
 import csv
 import datetime
 import re
+import string
 
 from typing import List
 '''
@@ -50,20 +51,19 @@ def edit_contact(index, value) -> None:
     '''
     contact_list[index] = value
 
-def view_tasks(tasks) -> None:
+def view_tasks(tasks: List) -> string:
     '''
     Запись в строку для Telegram
     '''
-    # for task in tasks:
     strings =[]
     for task in tasks:
         for key, value in task.items():
             strings.append('{}: {}'.format(key.capitalize(), value))
-    result ='/n '.join(strings)        
+    result ='\n'.join(strings)        
     return result
 
 
-def read_csv() -> None:
+def read_csv():
     '''
     Чтение из файла csv
     '''
@@ -72,7 +72,7 @@ def read_csv() -> None:
                 for task in csv.DictReader(f, skipinitialspace=True)]
     return tasks
  
-print(read_csv())
+#print(read_csv())
 
 def write_csv(tasks: List) -> None:
     '''
