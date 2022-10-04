@@ -10,22 +10,20 @@ global contact_list
 contact_list = []
 
 
-def add_contact(contact: List) -> None:
+def add_task(contact: List) -> None:
     '''
     добавить в список контакт
     '''
     contact_list.append(contact)
 
 
-def search_contact(searchstring: str) -> List:
+def search_contact(searchstring: str, contacts:str) -> List:
     '''
     Поиск в телефонной книге
     '''
-    searched_contact = {}
-    for contact in contact_list:
+    for contact in contacts:
         if searchstring in contact:
-            searched_contact[contact_list.index(contact)] = contact
-    return searched_contact
+            return contact
 
 
 def select_contact(choice: str, searched_contacts: Dict) -> Dict:

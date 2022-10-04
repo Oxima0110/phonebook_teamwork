@@ -17,98 +17,63 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Определяем константы этапов разговора
-VIEW, START, ADD, REMOVE = range(4)
-
-SHOW = '<просмотр телефонной книги>'
-ADD_LIST = '<добавление записи в телефонную книгу>'
+START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH = range(7)
 
 
 # функция обратного вызова точки входа в разговор
 def start(update, _):
-    reply_keyboard = [['<просмотр телефонной книги>','<добавление записи в телефонную книгу>']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard= True)
+    reply_keyboard = [['VIEW', 'ADD', 'DELETE', 'EDIT', 'SEARCH']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(
-      'Добро пожаловать в ToDoList.', reply_markup = markup_key, )
-    if update.message.text == SHOW:
+        'Добро пожаловать в ToDoList.', reply_markup=markup_key)
+    return MENU
+
+def menu(update, _):
+    if update.message.text == 'VIEW':
         return VIEW
-    if update.message.text == ADD_LIST:
+    if update.message.text == 'ADD':
+        update.message.replay_text("Введите задачу: ")
         return ADD
+    if update.message.text == 'DELETE':
+        update.message.replay_text('Какую задачу хотите удалить?: ')
+        return DELETE
+    if update.message.text == 'EDIT':
+        update.message.replay_text("Какую задачу хотите редактировать?: ")
+        return EDIT
+    if update.message.text == 'SEARCH':
+        update.message.replay_text("Поисковая строка: ")
+        return SEARCH
 
 
 def view(update, _):
-    update.message.reply_text('тест')
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    contact_list = o.read_csv()
-    update.message.reply_text(contact_list)
     update.message.reply_text('Что-то')
-    return START
+    # contact_list = o.read_csv()
+    # update.message.reply_text(contact_list)
+    update.message.reply_text('Что-то')
+    #return START
 
 
 def add(update, context):
-    pass
-    
+    task = update.message.text
+    o.add_task(task)
 
 
-# def player_turn(update, context):
-#     user = update.message.from_user
-#     logger.info(
-#         "Ход игрока %s: %f / %f", user.first_name, update.message.text)
-#     turn_count =context.user_data.get('turn_count')
-#     candy_count = context.user_data.get('candy_count')
-#     if candy_count < turn_count:
-#         turn_count = turn_count - (turn_count - candy_count)
-#     player_turn = update.message.text
-#     if player_turn.isdigit():
-#         player_turn = int(player_turn)
-#         if player_turn <= turn_count:
-#                 candy_count -= player_turn
-#                 if candy_count < 1:
-#                     update.message.reply_text(
-#                         f'Игрок проиграл') 
-#                     return ConversationHandler.END 
-#                 context.user_data['candy_count'] = candy_count
-#                 update.message.reply_text(
-#                         f'Вы ввели {player_turn} конфет. В куче осталось {candy_count}: ')
-#                 update.message.reply_text(f'Внимание ходит бот...')
-#                 context.user_data['turn_count']=turn_count
-#                 summ = turn(candy_count, turn_count)
-#                 context.bot.send_message(update.effective_chat.id,
-#                             f'Максимально допустимое значение за ход - {summ}') 
-#                 return COMPUTER_TURN
-#         else:
-#                 update.message.reply_text(
-#                         f'Максимально допустимое значение за ход - {turn_count}')    
-#     else:
-#         update.message.reply_text(
-#                         f'Нужно ввести число')
+def search(update, _):
+    searchstring = update.message.text
+    contacts = o.read_csv()
+    searched_contacts = o.search_contact(searchstring, contacts)
+    update.message.reply_text(searched_contacts)
 
-# def turn(candy_count, turn_count):
-#     return candy_count+turn_count
-        
-# def computer_turn(update, context):
-#     turn_count = context.user_data.get('turn_count')
-#     candy_count = context.user_data.get('candy_count')
-#     if candy_count < turn_count:
-#         turn_count = turn_count - (turn_count - candy_count)
-#     if candy_count > 1:
-#         candy_count -= turn_count-1
-#     else:
-#         candy_count -= turn_count
-#     if candy_count <1:
-#         update.message.reply_text(
-#                         f'Бот проиграл')
-#         return ConversationHandler.END 
-#     context.user_data['candy_count'] = candy_count
-#     update.message.reply_text(
-#             f'Бот походил на {turn_count-1} конфет. В куче осталось {candy_count}: ')
-#     update.message.reply_text(
-#             f'Ваш ход. Введите число в диапазоне от 1 до {turn_count}: ')
-#     context.user_data['turn_count']=turn_count            
-#     return PLAYER_TURN
 
-    
-    
+def delete(update, context):
+    searchstring = update.message.text
+    searched_contacts = o.search_contact(searchstring)
+    # o.select_contact(choice, searched_contacts)
+    # o.delete_contact(contact_list[contact])
+
+
 def cancel(update, _):
     # определяем пользователя
     user = update.message.from_user
@@ -117,7 +82,7 @@ def cancel(update, _):
     # Отвечаем на отказ поговорить
     update.message.reply_text(
         'Мое дело предложить - Ваше отказаться'
-        ' Будет скучно - пиши.', 
+        ' Будет скучно - пиши.',
     )
     return ConversationHandler.END
 
@@ -128,17 +93,21 @@ if __name__ == '__main__':
     # получаем диспетчера для регистрации обработчиков
     dispatcher = updater.dispatcher
 
-    # Определяем обработчик разговоров `ConversationHandler` 
+    # Определяем обработчик разговоров `ConversationHandler`
     # с состояниями GENDER, PHOTO, LOCATION и BIO
-    game_conversation_handler = ConversationHandler( # здесь строится логика разговора
+    game_conversation_handler = ConversationHandler(  # здесь строится логика разговора
         # точка входа в разговор
         entry_points=[CommandHandler('start', start)],
         # этапы разговора, каждый со своим списком обработчиков сообщений
         states={
-            VIEW:[MessageHandler(Filters.text, view)],
+            VIEW: [MessageHandler(Filters.text, view)],
             START: [CommandHandler('start', start)],
-            ADD:[MessageHandler(Filters.text, add)],
-            #COMPUTER_TURN: [MessageHandler(Filters.text, computer_turn)],
+            ADD: [MessageHandler(Filters.text, add)],
+            DELETE: [MessageHandler(Filters.text, delete)],
+            #EDIT: [MessageHandler(Filters.text, edit)],
+            SEARCH: [MessageHandler(Filters.text, search)],
+            MENU: [MessageHandler(Filters.text, menu)],
+
         },
         # точка выхода из разговора
         fallbacks=[CommandHandler('cancel', cancel)],
