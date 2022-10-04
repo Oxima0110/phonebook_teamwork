@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import operations as o
 from operations import contact_list
@@ -29,18 +30,19 @@ def start(update, _):
     return MENU
 
 def menu(update, _):
-    if update.message.text == 'VIEW':
-        return VIEW
-    if update.message.text == 'ADD':
+    choice = update.message.text
+    if choice == 'VIEW':
+        return view(update, _)
+    if choice == 'ADD':
         update.message.replay_text("Введите задачу: ")
         return ADD
-    if update.message.text == 'DELETE':
+    if choice == 'DELETE':
         update.message.replay_text('Какую задачу хотите удалить?: ')
         return DELETE
-    if update.message.text == 'EDIT':
+    if choice == 'EDIT':
         update.message.replay_text("Какую задачу хотите редактировать?: ")
         return EDIT
-    if update.message.text == 'SEARCH':
+    if choice == 'SEARCH':
         update.message.replay_text("Поисковая строка: ")
         return SEARCH
 
@@ -48,16 +50,19 @@ def menu(update, _):
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('Что-то')
-    # contact_list = o.read_csv()
-    # update.message.reply_text(contact_list)
-    update.message.reply_text('Что-то')
+    contact_list = o.read_csv()
+    update.message.reply_text(contact_list)
     #return START
 
 
-def add(update, context):
+def add(update, _):
+    user = update.message.from_user
+    logger.info("Контакт %s: %s", user.first_name, update.message.text)
     task = update.message.text
-    o.add_task(task)
+    #o.add_task(task)
+    #contact = [[user.first_name][datetime.datetime.now()], ['дата выполнения задачи'], [{task}] ]
+    contact = f'{user.first_name}, {datetime.datetime.now()}, дата выполнения задачи, {task}'
+    update.message.reply_text(contact)
 
 
 def search(update, _):

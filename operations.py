@@ -1,6 +1,7 @@
 from ast import Dict
 import json
 import csv
+import datetime
 
 from typing import List
 '''
@@ -14,6 +15,7 @@ def add_task(contact: List) -> None:
     '''
     добавить в список контакт
     '''
+    contact = [[datetime.datetime.now()], ]
     contact_list.append(contact)
 
 
