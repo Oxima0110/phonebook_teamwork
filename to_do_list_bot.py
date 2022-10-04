@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 import logging
 import operations as o
-from operations import contact_list
+from operations import add_task, contact_list, view_tasks
 from config import TOKEN
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import (
@@ -53,9 +53,10 @@ def menu(update, _):
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    contact_list = o.read_csv()
-    update.message.reply_text(contact_list)
-    #return START
+    #contact_list = o.read_csv()
+    tasks = view_tasks(contact_list)
+    update.message.reply_text(tasks)
+    return START
 
 
 def add(update, _):
@@ -65,7 +66,8 @@ def add(update, _):
     #o.add_task(task)
     #contact = [[user.first_name][datetime.datetime.now()], ['дата выполнения задачи'], [{task}] ]
     contact = f'Пользователь: {user.first_name} {user.last_name}\nВремя заведения задачи: {TIME_NOW}\nДата выполнения задачи: \nЗадача: {task}'
-    update.message.reply_text(contact)
+    add_task(contact)
+    return START
 
 
 def search(update, _):

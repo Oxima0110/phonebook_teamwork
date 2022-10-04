@@ -15,7 +15,6 @@ def add_task(contact: List) -> None:
     '''
     добавить в список контакт
     '''
-    contact = [[datetime.datetime.now()], ]
     contact_list.append(contact)
 
 
@@ -50,6 +49,16 @@ def edit_contact(index, value) -> None:
     '''
     contact_list[index] = value
 
+def view_tasks(tasks) -> None:
+    '''
+    Запись в строку для Telegram
+    '''
+    task =''
+    for t in tasks:
+        task += ''.join(t)+'\n'
+        #contact_list.append(line)
+    return task
+
 
 def read_csv() -> None:
     '''
@@ -72,8 +81,7 @@ def write_csv() -> None:
     '''
     with open('data.csv', 'w', encoding='utf-8') as f:
         writer = csv.writer(f, lineterminator='\r')
-        for contact in contact_list:
-            writer.writerow(contact)
+        writer.writerow(contact_list)
 
 
 def write_json() -> None:
