@@ -1,9 +1,7 @@
-from asyncio import tasks
-from asyncore import read
 from datetime import datetime as dt
 import logging
 import operations as o
-from operations import tasks
+from operations import read_csv, tasks
 from config import TOKEN
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import (
@@ -34,6 +32,7 @@ def start(update, _):
         'Добро пожаловать в ToDoList.', reply_markup=markup_key)
     return MENU
 
+
 def menu(update, _):
     choice = update.message.text
     if choice == 'VIEW':
@@ -55,23 +54,26 @@ def menu(update, _):
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    tasks_csv = o.view_tasks(tasks)
-    update.message.reply_text(tasks)
-    o.write_csv(tasks_csv )
+    tasks = read_csv()
+    tasks_string = o.view_tasks(tasks)
+    update.message.reply_text(tasks_string)
     return start(update, _)
 
 
 def add(update, _):
+    tasks = read_csv()
     task = {}
     user = update.message.from_user
-    logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    goal = update.message.text
-    task['Имя']= user.first_name
-    task['Фамилия']= user.last_name
-    task['Текущая дата']= TIME_NOW
-    task['Задача']= goal
-    update.message.reply_text(task)
+    logger.info("Task %s: %s", user.first_name, update.message.text)
+    name = update.message.text
+    task['Название задачи'] = name
+    task['Имя'] = user.first_name
+    task['Фамилия'] = user.last_name
+    task['Текущая дата'] = TIME_NOW
+    task['Дата выполнения'] = 'НУЖНО СДЕЛАТЬ'
+    task['Задача'] = 'НУЖНО СДЕЛАТЬ'
     tasks.append(task)
+    o.write_csv(tasks)
     return start(update, _)
 
 

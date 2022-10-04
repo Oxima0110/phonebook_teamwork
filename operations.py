@@ -2,6 +2,7 @@ from ast import Dict
 import json
 import csv
 import datetime
+import re
 
 from typing import List
 '''
@@ -53,45 +54,36 @@ def view_tasks(tasks) -> None:
     '''
     Запись в строку для Telegram
     '''
-    task =''
-    for t in tasks:
-        task += ''.join(t)+'\n'
-        #contact_list.append(line)
-    return task
+    # for task in tasks:
+    strings =[]
+    for task in tasks:
+        for key, value in task.items():
+            strings.append('{}: {}'.format(key.capitalize(), value))
+    result ='/n '.join(strings)        
+    return result
 
 
 def read_csv() -> None:
     '''
     Чтение из файла csv
     '''
-    
-    with open('todo.csv', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        contact =''
-        for line in reader:
-            contact += ' '.join(line)+'\n'
-            #contact_list.append(line)
-    return contact
-# read_csv()
-# print(contact_list)
+    with open('todo.csv','r', encoding='utf-8') as f:
+        tasks = [{key: value  for key, value in task.items()}
+                for task in csv.DictReader(f, skipinitialspace=True)]
+    return tasks
+ 
+print(read_csv())
 
-def write_csv(tasks:str) -> None:
+def write_csv(tasks: List) -> None:
     '''
     Запись в csv фаил. 
     '''
-    with open('todo.csv', 'w', encoding='utf-8') as f:
-        writer = csv.writer(f, lineterminator='\r')
-        for task in tasks:
-            writer.writerow(task.values())
-
-
-def write_json() -> None:
-    '''
-    Вызвать метод для первой записи в файле
-    '''
-
-    with open('data.json', 'w', encoding='utf-8', newline='') as rf:
-        json.dump(contact_list, rf, ensure_ascii=False, indent=2)
+    fieldnames = tasks[0].keys()
+    with open('todo.csv', 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames,lineterminator='\n')
+        writer.writeheader()
+        writer.writerows(tasks)
+        
 
 
 print(tasks)
