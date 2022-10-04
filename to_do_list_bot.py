@@ -1,3 +1,4 @@
+import telebot 
 from asyncio import tasks
 from asyncore import read
 from datetime import datetime as dt
@@ -13,6 +14,8 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
 )
+import config
+bot = telebot.TeleBot(config.TOKEN)
 # Включим ведение журнала
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -24,20 +27,24 @@ START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, GET_TASK, GET_DATE = range(9)
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
 
-
-
+welcome = 'CAACAgIAAxkBAAEF_19jPG6mcNqRdZlLDNJGlGEFs7nTpwAC5QwAAqhUwUj8YN30wHUCyioE'
+hello = 'CAACAgIAAxkBAAEF_5pjPIoFzmEpnniAQfzpzoP3-x2HJQACCw4AAui3qEiqv-bqgOxaUyoE'
+view_sticker = 'CAACAgIAAxkBAAEF_5xjPIvHVPz5lxKQwOxKrSCSivpBzQAC5woAAk0PCEn6k9uNa2S47SoE'
 # функция обратного вызова точки входа в разговор
 def start(update, _):
-    reply_keyboard = [['VIEW', 'ADD', 'DELETE', 'EDIT', 'SEARCH']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    reply_keyboard = [['👀 VIEW', '📝 ADD', '❌ DELETE', '✍ EDIT', '🔎 SEARCH']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    #bot.send_sticker(update.message.chat.id, hello)
+    bot.send_sticker(update.message.chat.id, welcome)
+    bot.send_message(update.effective_chat.id, f'Здраствуйте мастер {update.effective_user.first_name}, я Альфред, ваш персональный помощник')
     update.message.reply_text(
-        'Добро пожаловать в ToDoList.', reply_markup=markup_key)
+        'Добро пожаловать в ToDoList. Чем займёмся? 🧐', reply_markup=markup_key)
     return MENU
 
 def menu(update, _):
     choice = update.message.text
     if choice == 'VIEW':
-        return view(update, _)
+        return VIEW
     if choice == 'ADD':
         update.message.reply_text("Введите задачу: ")
         return ADD
@@ -55,10 +62,12 @@ def menu(update, _):
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
+    bot.send_sticker(update.message.chat.id, view_sticker)
+    bot.send_message(update.effective_chat.id, f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
     tasks_csv = o.view_tasks(tasks)
     update.message.reply_text(tasks)
     o.write_csv(tasks_csv )
-    return start(update, _)
+    return MENU
 
 
 def add(update, _):
