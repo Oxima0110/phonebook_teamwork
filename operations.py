@@ -20,16 +20,19 @@ def add_task(key:str, value:str) -> None:
     tasks[key] = value
 
 
-def search_contact(searchstring: str, contacts:str) -> List:
+def search_task(searchstring: str, tasks:List):
     '''
     Поиск в телефонной книге
     '''
-    for contact in contacts:
-        if searchstring in contact:
-            return contact
+    searched_tasks =[]
+    for task in tasks:
+        for value in task.values():
+            if value==searchstring:
+                   searched_tasks.append(task) 
+    return searched_tasks        
 
 
-def select_contact(choice: str, searched_contacts: Dict) -> Dict:
+def select_contact(choice: str, searched_contacts: List) :
     '''
     Выбрать элемент в найденных
     '''
@@ -59,6 +62,7 @@ def view_tasks(tasks: List) -> string:
     for task in tasks:
         for key, value in task.items():
             strings.append('{}: {}'.format(key.capitalize(), value))
+        strings.append(' ')        
     result ='\n'.join(strings)        
     return result
 

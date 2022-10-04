@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, GET_TASK, GET_DATE = range(9)
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
-
 welcome = 'CAACAgIAAxkBAAEF_19jPG6mcNqRdZlLDNJGlGEFs7nTpwAC5QwAAqhUwUj8YN30wHUCyioE'
 hello = 'CAACAgIAAxkBAAEF_5pjPIoFzmEpnniAQfzpzoP3-x2HJQACCw4AAui3qEiqv-bqgOxaUyoE'
 view_sticker = 'CAACAgIAAxkBAAEF_5xjPIvHVPz5lxKQwOxKrSCSivpBzQAC5woAAk0PCEn6k9uNa2S47SoE'
@@ -92,17 +91,22 @@ def add(update, _):
 
 
 def search(update, _):
+    tasks = o.read_csv()
     searchstring = update.message.text
-    contacts = o.read_csv()
-    searched_contacts = o.search_contact(searchstring, contacts)
-    update.message.reply_text(searched_contacts)
+    bot.send_message(update.effective_chat.id,
+                     f'{update.effective_user.first_name}, по вашему запросу {searchstring} найдено:')
+    searched_tasks = o.search_task(searchstring, tasks)
+    if len(searched_tasks) > 0:
+        tasks_string = o.view_tasks(searched_tasks)
+        update.message.reply_text(tasks_string)
+    else:
+        update.message.reply_text(f'{len(searched_tasks)} элементов')
+    return start(update, _)
 
 
 def delete(update, context):
-    searchstring = update.message.text
-    searched_contacts = o.search_contact(searchstring)
-    # o.select_contact(choice, searched_contacts)
-    # o.delete_contact(contact_list[contact])
+    pass
+
 
 def edit(update, context):
     pass
