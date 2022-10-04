@@ -7,15 +7,15 @@ from typing import List
 '''
 глобальный список для записи контактов. 
 '''
-global contact_list
-contact_list = []
+global tasks
+tasks = [] 
 
 
-def add_task(contact: List) -> None:
+def add_task(key:str, value:str) -> None:
     '''
     добавить в список контакт
     '''
-    contact_list.append(contact)
+    tasks[key] = value
 
 
 def search_contact(searchstring: str, contacts:str) -> List:
@@ -65,7 +65,7 @@ def read_csv() -> None:
     Чтение из файла csv
     '''
     
-    with open('data.csv', encoding='utf-8') as f:
+    with open('todo.csv', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',')
         contact =''
         for line in reader:
@@ -75,13 +75,14 @@ def read_csv() -> None:
 # read_csv()
 # print(contact_list)
 
-def write_csv() -> None:
+def write_csv(tasks:str) -> None:
     '''
     Запись в csv фаил. 
     '''
-    with open('data.csv', 'w', encoding='utf-8') as f:
+    with open('todo.csv', 'w', encoding='utf-8') as f:
         writer = csv.writer(f, lineterminator='\r')
-        writer.writerow(contact_list)
+        for task in tasks:
+            writer.writerow(task.values())
 
 
 def write_json() -> None:
@@ -93,4 +94,4 @@ def write_json() -> None:
         json.dump(contact_list, rf, ensure_ascii=False, indent=2)
 
 
-print(contact_list)
+print(tasks)

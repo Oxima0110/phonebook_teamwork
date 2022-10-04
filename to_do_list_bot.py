@@ -1,7 +1,9 @@
+from asyncio import tasks
+from asyncore import read
 from datetime import datetime as dt
 import logging
 import operations as o
-from operations import add_task, contact_list, view_tasks
+from operations import tasks
 from config import TOKEN
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import (
@@ -18,7 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Определяем константы этапов разговора
-START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH = range(7)
+START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, GET_TASK, GET_DATE = range(9)
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
 
@@ -53,21 +55,24 @@ def menu(update, _):
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    #contact_list = o.read_csv()
-    tasks = view_tasks(contact_list)
+    tasks_csv = o.view_tasks(tasks)
     update.message.reply_text(tasks)
-    return START
+    o.write_csv(tasks_csv )
+    return start(update, _)
 
 
 def add(update, _):
+    task = {}
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    task = update.message.text
-    #o.add_task(task)
-    #contact = [[user.first_name][datetime.datetime.now()], ['дата выполнения задачи'], [{task}] ]
-    contact = f'Пользователь: {user.first_name} {user.last_name}\nВремя заведения задачи: {TIME_NOW}\nДата выполнения задачи: \nЗадача: {task}'
-    add_task(contact)
-    return START
+    goal = update.message.text
+    task['Имя']= user.first_name
+    task['Фамилия']= user.last_name
+    task['Текущая дата']= TIME_NOW
+    task['Задача']= goal
+    update.message.reply_text(task)
+    tasks.append(task)
+    return start(update, _)
 
 
 def search(update, _):
