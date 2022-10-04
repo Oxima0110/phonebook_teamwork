@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime as dt
 import logging
 import operations as o
 from operations import contact_list
@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 # Определяем константы этапов разговора
 START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH = range(7)
 
+TIME_NOW = dt.now().strftime('%D_%H:%M')
+
+
 
 # функция обратного вызова точки входа в разговор
 def start(update, _):
@@ -34,16 +37,16 @@ def menu(update, _):
     if choice == 'VIEW':
         return view(update, _)
     if choice == 'ADD':
-        update.message.replay_text("Введите задачу: ")
+        update.message.reply_text("Введите задачу: ")
         return ADD
     if choice == 'DELETE':
-        update.message.replay_text('Какую задачу хотите удалить?: ')
+        update.message.reply_text('Какую задачу хотите удалить?: ')
         return DELETE
     if choice == 'EDIT':
-        update.message.replay_text("Какую задачу хотите редактировать?: ")
+        update.message.reply_text("Какую задачу хотите редактировать?: ")
         return EDIT
     if choice == 'SEARCH':
-        update.message.replay_text("Поисковая строка: ")
+        update.message.reply_text("Поисковая строка: ")
         return SEARCH
 
 
@@ -61,7 +64,7 @@ def add(update, _):
     task = update.message.text
     #o.add_task(task)
     #contact = [[user.first_name][datetime.datetime.now()], ['дата выполнения задачи'], [{task}] ]
-    contact = f'{user.first_name}, {datetime.datetime.now()}, дата выполнения задачи, {task}'
+    contact = f'Пользователь: {user.first_name} {user.last_name}\nВремя заведения задачи: {TIME_NOW}\nДата выполнения задачи: \nЗадача: {task}'
     update.message.reply_text(contact)
 
 
