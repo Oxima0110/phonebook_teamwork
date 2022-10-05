@@ -42,7 +42,8 @@ def start(update, _):
     update.message.reply_text(
         'Добро пожаловать в ToDoList. Чем займёмся? 🧐\n', reply_markup=markup_key)
     return MENU
-
+def main_menu():
+    return MENU
 
 def menu(update, _):
     user = update.message.from_user
@@ -71,7 +72,7 @@ def view(update, _):
     # logger.info("Контакт %s: %s", user.first_name, update.message.text)
     # bot.send_sticker(update.message.chat.id, view_sticker)
     bot.send_message(update.effective_chat.id,
-                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇')
+                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇⬇⬇')
     tasks = read_csv()
     user = update.message.from_user
     tasks_filter = o.filter_task(user.first_name, tasks)
