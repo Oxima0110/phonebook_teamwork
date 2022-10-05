@@ -121,12 +121,14 @@ def search(update, _):
     logger.info("Выбор поиска: %s: %s", user.first_name, update.message.text)
     searchstring = update.message.text
     tasks = read_csv()
-    searched_tasks = o.search_task(searchstring, tasks)
+    tasks_filter = o.filter_task(user.first_name, tasks)
+    searched_tasks = o.search_task(searchstring, tasks_filter)
     bot.send_message(update.effective_chat.id,
                     f'{update.effective_user.first_name}, по вашему запросу <{searchstring}> найдено:')
     tasks_string = o.view_tasks(searched_tasks)
     update.message.reply_text(tasks_string)
     return start(update, _)
+
     
 
 
