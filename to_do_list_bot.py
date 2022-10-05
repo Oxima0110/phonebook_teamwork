@@ -23,19 +23,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Определяем константы этапов разговора
+
 START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, SEARCH_MENU, GET_TASK, GET_DATE = range(10)
+
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
 
 # функция обратного вызова точки входа в разговор
 
 def start(update, _):
-    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH']]
+    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', 'EXIT']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
     bot.send_sticker(update.message.chat.id, st.welcome)
     bot.send_message(update.effective_chat.id,
                      f'Здраствуйте мастер {update.effective_user.first_name}, я Альфред, ваш персональный помощник')
+
     update.message.reply_text(
         'Добро пожаловать в ToDoList. Чем займёмся? 🧐\nвведите ''/cancel'' для выхода', reply_markup=markup_key)
     return MENU
@@ -54,7 +57,8 @@ def menu(update, _):
         bot.send_message(update.effective_chat.id,
                      f'Что бы вы хотели найти, Мастер {update.effective_user.first_name}: ')
         return SEARCH
-
+    if choice == 'EXIT':
+        return cancel(update, _)
 
 def view(update, _):
     user = update.message.from_user
@@ -66,6 +70,7 @@ def view(update, _):
     tasks_string = o.view_tasks(tasks)
     update.message.reply_text(tasks_string)
     return start(update, _)
+
 
 
 def add(update, _):
@@ -116,7 +121,7 @@ def search_menu(update, _):
         return EDIT
 
 def delete(update, _):
-    tasks =read_csv()
+  
     o.delete_task()
     o.write_csv(tasks)
     bot.send_sticker(update.message.chat.id, st.complete)
@@ -126,6 +131,14 @@ def delete(update, _):
 
 def edit(update, context):
     pass
+
+def get_info(update, context):
+    print('1')
+    user = update.message.from_user
+    logger.info("Ввод данных %s: %s", user.first_name, update.message.text)
+    info = update.message.text
+    context.user_data['info'] = info
+    return 
 
 
 def cancel(update, _):
@@ -163,6 +176,7 @@ if __name__ == '__main__':
             SEARCH_MENU: [MessageHandler(Filters.text, search_menu)],
             SEARCH: [MessageHandler(Filters.text, search)],
             MENU: [MessageHandler(Filters.text, menu)],
+           
 
         },
         # точка выхода из разговора
