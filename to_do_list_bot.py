@@ -12,6 +12,7 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
 )
+import stickers as st
 import config
 from phonebook_bot import choice
 bot = telebot.TeleBot(config.TOKEN)
@@ -27,12 +28,8 @@ START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, SEARCH_MENU, GET_TASK, GET_DATE, D
 
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
-welcome = 'CAACAgIAAxkBAAEF_19jPG6mcNqRdZlLDNJGlGEFs7nTpwAC5QwAAqhUwUj8YN30wHUCyioE'
-hello = 'CAACAgIAAxkBAAEF_5pjPIoFzmEpnniAQfzpzoP3-x2HJQACCw4AAui3qEiqv-bqgOxaUyoE'
-view_sticker = 'CAACAgIAAxkBAAEF_5xjPIvHVPz5lxKQwOxKrSCSivpBzQAC5woAAk0PCEn6k9uNa2S47SoE'
 
 # функция обратного вызова точки входа в разговор
-
 
 def start(update, _):
     reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', '❌ DELETE', '✍ EDIT', 'EXIT']]
@@ -54,7 +51,7 @@ def menu(update, _):
     if choice == '👀 VIEW':
         return view(update, _)
     if choice == '📝 ADD':
-        update.message.reply_text("Введите задачу: ")
+        update.message.reply_text('Введите задачу сэр: ')
         return ADD
     if choice == '🔎 SEARCH':
         update.message.reply_text("Поисковая строка: ")
@@ -74,7 +71,7 @@ def view(update, _):
     # logger.info("Контакт %s: %s", user.first_name, update.message.text)
     # bot.send_sticker(update.message.chat.id, view_sticker)
     bot.send_message(update.effective_chat.id,
-                     f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
+                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇')
     tasks = read_csv()
     user = update.message.from_user
     tasks_filter = o.filter_task(user.first_name, tasks)
@@ -177,10 +174,12 @@ def cancel(update, _):
     # Пишем в журнал о том, что пользователь не разговорчивый
     logger.info("Пользователь %s отменил разговор.", user.first_name)
     # Отвечаем на отказ поговорить
+    bot.send_sticker(update.message.chat.id, st.goodbye)
+    bot.send_message(update.effective_chat.id,
+                     f'До новых встреч, мастер {update.effective_user.first_name}. 👋')
     update.message.reply_text(
-        'Мое дело предложить - Ваше отказаться'
-        ' Будет скучно - пиши.',
-    )
+        'Вы знаете где меня найти.',)
+    bot.send_sticker(update.message.chat.id, st.relax)
     return ConversationHandler.END
 
 
