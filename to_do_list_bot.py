@@ -76,7 +76,9 @@ def view(update, _):
     bot.send_message(update.effective_chat.id,
                      f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
     tasks = read_csv()
-    tasks_string = o.view_tasks(tasks)
+    user = update.message.from_user
+    tasks_filter = o.filter_task(user.first_name, tasks)
+    tasks_string = o.view_tasks(tasks_filter)
     update.message.reply_text(tasks_string)
     return start(update, _)
 
