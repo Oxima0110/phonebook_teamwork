@@ -35,7 +35,7 @@ view_sticker = 'CAACAgIAAxkBAAEF_5xjPIvHVPz5lxKQwOxKrSCSivpBzQAC5woAAk0PCEn6k9uN
 
 
 def start(update, _):
-    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', 'EXIT']]
+    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', '❌ DELETE', '✍ EDIT', 'EXIT']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
     bot.send_sticker(update.message.chat.id, welcome)
@@ -57,8 +57,15 @@ def menu(update, _):
     if choice == '🔎 SEARCH':
         update.message.reply_text("Поисковая строка: ")
         return SEARCH
+    if choice == '❌ DELETE':
+        update.message.reply_text("Найти задачу для удаления: ")
+        return DELETE
+    if choice == '✍ EDIT':
+        update.message.reply_text("Найти задачу для редактирования: ")
+        return EDIT    
     if choice == 'EXIT':
         return cancel(update, _)
+
 
 def view(update, _):
     user = update.message.from_user
@@ -70,7 +77,6 @@ def view(update, _):
     tasks_string = o.view_tasks(tasks)
     update.message.reply_text(tasks_string)
     return start(update, _)
-
 
 
 def add(update, _):
@@ -90,45 +96,35 @@ def add(update, _):
 
 
 def search(update, _):
-    tasks = o.read_csv()
+    
     searchstring = update.message.text
+    tasks = read_csv()
     searched_tasks = o.search_task(searchstring, tasks)
-    if len(searched_tasks) > 1:
-        update.message.reply_text('Укажите более точный запрос')
-        return
-    if len(searched_tasks) == 1:
-        bot.send_message(update.effective_chat.id,
-                     f'{update.effective_user.first_name}, по вашему запросу <{searchstring}> найдено:')
-        tasks_string = o.view_tasks(searched_tasks)
-        update.message.reply_text(tasks_string)
-        reply_keyboard = [['❌ DELETE', '✍ EDIT']]
-        markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-        update.message.reply_text('Выберите операцию с контактом: 🧐\nвведите ''/cancel'' для выхода', reply_markup=markup_key)
-        return SEARCH_MENU
-    if len(searched_tasks) == 0:
-        update.message.reply_text(f'{len(searched_tasks)} элементов найдено')
-        update.message.reply_text('Укажите более точный запрос')
-        return
+    bot.send_message(update.effective_chat.id,
+                    f'{update.effective_user.first_name}, по вашему запросу <{searchstring}> найдено:')
+    tasks_string = o.view_tasks(searched_tasks)
+    update.message.reply_text(tasks_string)
     return start(update, _)
+    
 
-
-def search_menu(update, _):
-    choice = update.message.text
-    if choice == '❌ DELETE':
-        return delete(update, _)
-    if choice == '✍ EDIT':
-        return EDIT
 
 def delete(update, _):
-  
-    o.delete_task()
+    tasks = read_csv()
+    searchstring = update.message.text
+    o.delete_task(searchstring, tasks)
+    update.message.reply_text('задача удалена')
     o.write_csv(tasks)
-    update.message.reply_text('Задача удалена')
     return start(update, _)
 
+    
+def edit(update, _):
+    tasks = read_csv()
+    searchstring = update.message.text
+    o.edit_task(searchstring, tasks)
+    update.message.reply_text('задача отредактирована')
+    o.write_csv(tasks)
+    return start(update, _)
 
-def edit(update, context):
-    pass
 
 def get_info(update, context):
     print('1')
@@ -169,9 +165,9 @@ if __name__ == '__main__':
             START: [CommandHandler('start', start)],
             ADD: [MessageHandler(Filters.text, add)],
             DELETE: [MessageHandler(Filters.text, delete)],
-            SEARCH_MENU: [MessageHandler(Filters.text, search_menu)],
             SEARCH: [MessageHandler(Filters.text, search)],
             MENU: [MessageHandler(Filters.text, menu)],
+            EDIT: [MessageHandler(Filters.text, edit)],
            
 
         },
