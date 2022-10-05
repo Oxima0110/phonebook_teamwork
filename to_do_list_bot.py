@@ -38,7 +38,7 @@ def start(update, _):
     reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', '❌ DELETE', '✍ EDIT', 'EXIT']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-    bot.send_sticker(update.message.chat.id, welcome)
+    # bot.send_sticker(update.message.chat.id, welcome)
     bot.send_message(update.effective_chat.id,
                      f'Здраствуйте мастер {update.effective_user.first_name}, я Альфред, ваш персональный помощник')
 
@@ -72,7 +72,7 @@ def menu(update, _):
 def view(update, _):
     # user = update.message.from_user
     # logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    bot.send_sticker(update.message.chat.id, view_sticker)
+    # bot.send_sticker(update.message.chat.id, view_sticker)
     bot.send_message(update.effective_chat.id,
                      f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
     tasks = read_csv()
