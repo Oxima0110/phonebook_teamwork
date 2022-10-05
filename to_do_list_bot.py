@@ -47,8 +47,6 @@ def start(update, _):
     return MENU
 
 
-
-
 def menu(update, _):
     choice = update.message.text
     if choice == '👀 VIEW':
@@ -89,7 +87,6 @@ def add(update, _):
     tasks.append(task)
     o.write_csv(tasks)
     return start(update, _)
-
 
 
 def search(update, _):
@@ -175,8 +172,7 @@ if __name__ == '__main__':
             SEARCH_MENU: [MessageHandler(Filters.text, search_menu)],
             SEARCH: [MessageHandler(Filters.text, search)],
             MENU: [MessageHandler(Filters.text, menu)],
-            GET_MENU: [MessageHandler(Filters.text, get_menu)],
-            GET_INFO: [MessageHandler(Filters.text, get_info)],
+           
 
         },
         # точка выхода из разговора
