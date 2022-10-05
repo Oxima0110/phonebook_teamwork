@@ -18,7 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Определяем константы этапов разговора
-START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH = range(7)
+START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, GET_MENU, GET_INFO = range(9)
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
 
@@ -26,10 +26,17 @@ TIME_NOW = dt.now().strftime('%D_%H:%M')
 
 # функция обратного вызова точки входа в разговор
 def start(update, _):
-    reply_keyboard = [['VIEW', 'ADD', 'DELETE', 'EDIT', 'SEARCH']]
+    reply_keyboard = [['VIEW', 'ADD', 'DELETE', 'EDIT', 'SEARCH', 'EXIT']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(
         'Добро пожаловать в ToDoList.', reply_markup=markup_key)
+    return MENU
+
+def get_menu(update, _):
+    reply_keyboard = [['VIEW', 'ADD', 'DELETE', 'EDIT', 'SEARCH', 'EXIT']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    update.message.reply_text(
+        'Выбор следующей операции:', reply_markup=markup_key)
     return MENU
 
 def menu(update, _):
@@ -39,6 +46,7 @@ def menu(update, _):
     if choice == 'ADD':
         update.message.reply_text("Введите задачу: ")
         return ADD
+        # return add(update, _)
     if choice == 'DELETE':
         update.message.reply_text('Какую задачу хотите удалить?: ')
         return DELETE
@@ -48,7 +56,8 @@ def menu(update, _):
     if choice == 'SEARCH':
         update.message.reply_text("Поисковая строка: ")
         return SEARCH
-
+    if choice == 'EXIT':
+        return cancel(update, _)
 
 def view(update, _):
     user = update.message.from_user
@@ -59,13 +68,21 @@ def view(update, _):
     return START
 
 
-def add(update, _):
+def add(update, context):
+    update.message.reply_text("Введите задачу: ")
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
+    # get_info(update, context)
     task = update.message.text
+    # task = context.user_data.get('info')
+    print(task)
+    update.message.reply_text("Введите дату: ")
+    get_info(update, context)
+    data = context.user_data.get('info')
+    print(data)
     #o.add_task(task)
     #contact = [[user.first_name][datetime.datetime.now()], ['дата выполнения задачи'], [{task}] ]
-    contact = f'Пользователь: {user.first_name} {user.last_name}\nВремя заведения задачи: {TIME_NOW}\nДата выполнения задачи: \nЗадача: {task}'
+    contact = f'Пользователь: {user.first_name} {user.last_name}\nВремя заведения задачи: {TIME_NOW}\nДата выполнения задачи: {data}\nЗадача: {task}'
     add_task(contact)
     return START
 
@@ -82,6 +99,14 @@ def delete(update, context):
     searched_contacts = o.search_contact(searchstring)
     # o.select_contact(choice, searched_contacts)
     # o.delete_contact(contact_list[contact])
+
+def get_info(update, context):
+    print('1')
+    user = update.message.from_user
+    logger.info("Ввод данных %s: %s", user.first_name, update.message.text)
+    info = update.message.text
+    context.user_data['info'] = info
+    return 
 
 
 def cancel(update, _):
@@ -117,6 +142,8 @@ if __name__ == '__main__':
             #EDIT: [MessageHandler(Filters.text, edit)],
             SEARCH: [MessageHandler(Filters.text, search)],
             MENU: [MessageHandler(Filters.text, menu)],
+            GET_MENU: [MessageHandler(Filters.text, get_menu)],
+            GET_INFO: [MessageHandler(Filters.text, get_info)],
 
         },
         # точка выхода из разговора
