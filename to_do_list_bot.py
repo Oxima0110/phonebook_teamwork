@@ -39,7 +39,8 @@ def start(update, _):
     update.message.reply_text(
         'Добро пожаловать в ToDoList. Чем займёмся? 🧐\nвведите ''/cancel'' для выхода', reply_markup=markup_key)
     return MENU
-
+def main_menu():
+    return MENU
 
 def menu(update, _):
     choice = update.message.text
@@ -60,7 +61,7 @@ def view(update, _):
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
     bot.send_sticker(update.message.chat.id, st.view_sticker)
     bot.send_message(update.effective_chat.id,
-                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇')
+                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇⬇⬇')
     tasks = read_csv()
     tasks_string = o.view_tasks(tasks)
     update.message.reply_text(tasks_string)
@@ -92,11 +93,12 @@ def search(update, _):
         return
     if len(searched_tasks) == 1:
         bot.send_message(update.effective_chat.id,
-                     f'{update.effective_user.first_name}, по вашему запросу <{searchstring}> найдено:')
+                     f'{update.effective_user.first_name}, по вашему запросу <{searchstring}> найдено ⬇')
         tasks_string = o.view_tasks(searched_tasks)
         update.message.reply_text(tasks_string)
         reply_keyboard = [['❌ DELETE', '✍ EDIT']]
         markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+        bot.send_sticker(update.message.chat.id, st.hello)
         update.message.reply_text('Выберите операцию с контактом: 🧐\nвведите ''/cancel'' для выхода', reply_markup=markup_key)
         return SEARCH_MENU
     if len(searched_tasks) == 0:
@@ -117,7 +119,8 @@ def delete(update, _):
     tasks =read_csv()
     o.delete_task()
     o.write_csv(tasks)
-    update.message.reply_text('Задача удалена')
+    bot.send_sticker(update.message.chat.id, st.complete)
+    update.message.reply_text('Задача вычеркнута, сэр')
     return start(update, _)
 
 
