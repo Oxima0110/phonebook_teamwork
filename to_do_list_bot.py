@@ -48,6 +48,8 @@ def start(update, _):
 
 
 def menu(update, _):
+    user = update.message.from_user
+    logger.info("Выбор операции: %s: %s", user.first_name, update.message.text)
     choice = update.message.text
     if choice == '👀 VIEW':
         return view(update, _)
@@ -68,8 +70,8 @@ def menu(update, _):
 
 
 def view(update, _):
-    user = update.message.from_user
-    logger.info("Контакт %s: %s", user.first_name, update.message.text)
+    # user = update.message.from_user
+    # logger.info("Контакт %s: %s", user.first_name, update.message.text)
     bot.send_sticker(update.message.chat.id, view_sticker)
     bot.send_message(update.effective_chat.id,
                      f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
@@ -96,7 +98,8 @@ def add(update, _):
 
 
 def search(update, _):
-    
+    user = update.message.from_user
+    logger.info("Выбор поиска: %s: %s", user.first_name, update.message.text)
     searchstring = update.message.text
     tasks = read_csv()
     searched_tasks = o.search_task(searchstring, tasks)
@@ -110,6 +113,8 @@ def search(update, _):
 
 def delete(update, _):
     tasks = read_csv()
+    user = update.message.from_user
+    logger.info("Выбор удаления: %s: %s", user.first_name, update.message.text)
     searchstring = update.message.text
     o.delete_task(searchstring, tasks)
     update.message.reply_text('задача удалена')
@@ -119,6 +124,9 @@ def delete(update, _):
     
 def edit(update, _):
     tasks = read_csv()
+    user = update.message.from_user
+    logger.info("Выбор редактирования: %s: %s", user.first_name, update.message.text)
+    searchstring = update.message.text
     searchstring = update.message.text
     o.edit_task(searchstring, tasks)
     update.message.reply_text('задача отредактирована')
