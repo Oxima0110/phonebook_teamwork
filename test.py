@@ -15,7 +15,7 @@ dictionary = {'Пользователь': 'человек',
               'Задача': 'проснуться'}
 strings = []
 for key,item in dictionary.items():
-    strings.append("{}: {}".format(key.capitalize(), item))
+    strings.append("{}: {}\n".format(key.capitalize(), item))
 result = " ".join(strings)
 print(result)
 
