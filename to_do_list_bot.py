@@ -12,6 +12,7 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
 )
+import stickers as st
 import config
 bot = telebot.TeleBot(config.TOKEN)
 # Включим ведение журнала
@@ -24,18 +25,14 @@ logger = logging.getLogger(__name__)
 START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, GET_TASK, GET_DATE = range(9)
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
-welcome = 'CAACAgIAAxkBAAEF_19jPG6mcNqRdZlLDNJGlGEFs7nTpwAC5QwAAqhUwUj8YN30wHUCyioE'
-hello = 'CAACAgIAAxkBAAEF_5pjPIoFzmEpnniAQfzpzoP3-x2HJQACCw4AAui3qEiqv-bqgOxaUyoE'
-view_sticker = 'CAACAgIAAxkBAAEF_5xjPIvHVPz5lxKQwOxKrSCSivpBzQAC5woAAk0PCEn6k9uNa2S47SoE'
 
 # функция обратного вызова точки входа в разговор
-
 
 def start(update, _):
     reply_keyboard = [['👀 VIEW', '📝 ADD', '❌ DELETE', '✍ EDIT', '🔎 SEARCH']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-    bot.send_sticker(update.message.chat.id, welcome)
+    bot.send_sticker(update.message.chat.id, st.welcome)
     bot.send_message(update.effective_chat.id,
                      f'Здраствуйте мастер {update.effective_user.first_name}, я Альфред, ваш персональный помощник')
     update.message.reply_text(
@@ -48,25 +45,29 @@ def menu(update, _):
     if choice == '👀 VIEW':
         return view(update, _)
     if choice == '📝 ADD':
-        update.message.reply_text("Введите задачу: ")
+        update.message.reply_text('Введите задачу сэр: ')
         return ADD
     if choice == '❌ DELETE':
+        bot.send_sticker(update.message.chat.id, st.listen)
         update.message.reply_text('Какую задачу хотите удалить?: ')
         return DELETE
     if choice == '✍ EDIT':
+        bot.send_sticker(update.message.chat.id, st.listen)
         update.message.reply_text("Какую задачу хотите редактировать?: ")
         return EDIT
     if choice == '🔎 SEARCH':
-        update.message.reply_text("Поисковая строка: ")
+        bot.send_sticker(update.message.chat.id, st.listen)
+        bot.send_message(update.effective_chat.id,
+                     f'Что бы вы хотели найти, Мастер {update.effective_user.first_name}: ')
         return SEARCH
 
 
 def view(update, _):
     user = update.message.from_user
     logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    bot.send_sticker(update.message.chat.id, view_sticker)
+    bot.send_sticker(update.message.chat.id, st.view_sticker)
     bot.send_message(update.effective_chat.id,
-                     f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
+                     f'Давайте-ка взглянем на список задач мастер {update.effective_user.first_name} ⬇')
     tasks = read_csv()
     tasks_string = o.view_tasks(tasks)
     update.message.reply_text(tasks_string)
@@ -93,8 +94,9 @@ def add(update, _):
 def search(update, _):
     tasks = o.read_csv()
     searchstring = update.message.text
+    bot.send_sticker(update.message.chat.id, st.hello)
     bot.send_message(update.effective_chat.id,
-                     f'{update.effective_user.first_name}, по вашему запросу {searchstring} найдено:')
+                     f'Мастер {update.effective_user.first_name}, по вашему запросу {searchstring} найдено:')
     searched_tasks = o.search_task(searchstring, tasks)
     if len(searched_tasks) > 0:
         tasks_string = o.view_tasks(searched_tasks)
@@ -118,10 +120,12 @@ def cancel(update, _):
     # Пишем в журнал о том, что пользователь не разговорчивый
     logger.info("Пользователь %s отменил разговор.", user.first_name)
     # Отвечаем на отказ поговорить
+    bot.send_sticker(update.message.chat.id, st.goodbye)
+    bot.send_message(update.effective_chat.id,
+                     f'До новых встреч, мастер {update.effective_user.first_name}. 👋')
     update.message.reply_text(
-        'Мое дело предложить - Ваше отказаться'
-        ' Будет скучно - пиши.',
-    )
+        'Вы знаете где меня найти.',)
+    bot.send_sticker(update.message.chat.id, st.relax)
     return ConversationHandler.END
 
 
