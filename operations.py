@@ -1,16 +1,15 @@
-from ast import Dict
-
 import csv
-import datetime
-import re
 import string
-
 from typing import List
+
+
 '''
 глобальный список для записи контактов. 
 '''
 global tasks
-tasks = [] 
+global searched_tasks
+tasks = []
+searched_tasks = [] 
 
 
 def add_task(key:str, value:str) -> None:
@@ -24,29 +23,19 @@ def search_task(searchstring: str, tasks:List):
     '''
     Поиск в телефонной книге
     '''
-    searched_tasks =[]
     for task in tasks:
         for value in task.values():
-            if value==searchstring:
-                   searched_tasks.append(task) 
+            if searchstring in value:
+                   searched_tasks.append(task)
     return searched_tasks        
 
 
-def select_contact(choice: str, searched_contacts: List) :
-    '''
-    Выбрать элемент в найденных
-    '''
-    for key, value in searched_contacts.items():
-        if choice == key:
-            return key, value
-
-
-def delete_contact(contact: str) -> None:
+def delete_task() -> None:
     '''
     Удалить контакт из списка 
     '''
-    contact_list.remove(contact_list[contact])
-
+    tasks = [task for task in tasks if task in searched_tasks]
+    return tasks
 
 def edit_contact(index, value) -> None:
     '''
