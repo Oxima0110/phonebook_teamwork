@@ -127,7 +127,6 @@ def edit(update, _):
     user = update.message.from_user
     logger.info("Выбор редактирования: %s: %s", user.first_name, update.message.text)
     searchstring = update.message.text
-    searchstring = update.message.text
     o.edit_task(searchstring, tasks)
     update.message.reply_text('задача отредактирована')
     o.write_csv(tasks)
