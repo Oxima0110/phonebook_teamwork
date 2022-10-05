@@ -115,7 +115,7 @@ def search_menu(update, _):
         return EDIT
 
 def delete(update, _):
-    tasks =read_csv()
+  
     o.delete_task()
     o.write_csv(tasks)
     update.message.reply_text('Задача удалена')
