@@ -32,7 +32,7 @@ TIME_NOW = dt.now().strftime('%D_%H:%M')
 # функция обратного вызова точки входа в разговор
 
 def start(update, _):
-    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', 'EXIT']]
+    reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', '👋 EXIT']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
     bot.send_sticker(update.message.chat.id, st.welcome)
