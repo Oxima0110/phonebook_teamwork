@@ -30,18 +30,23 @@ def search_task(searchstring: str, tasks:List):
     return searched_tasks        
 
 
-def delete_task() -> None:
+def delete_task(searchstring, tasks: List) -> None:
     '''
     Удалить контакт из списка 
     '''
-    tasks = [task for task in tasks if task in searched_tasks]
-    return tasks
+    for task in tasks:
+        if searchstring in task.get('Задача'):
+            tasks.remove(task)
+    
 
-def edit_contact(index, value) -> None:
+def edit_task(searchstring, tasks: List) -> None:
     '''
     Редактирование контакта. 
     '''
-    contact_list[index] = value
+    for task in tasks:
+        if searchstring in task.get('Задача'):
+            task['Задача'] ='Поменял'
+
 
 def view_tasks(tasks: List) -> string:
     '''
@@ -79,4 +84,4 @@ def write_csv(tasks: List) -> None:
         
 
 
-print(tasks)
+
