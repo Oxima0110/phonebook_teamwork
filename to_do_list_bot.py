@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 # Определяем константы этапов разговора
 
-START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, SEARCH_MENU, GET_TASK, GET_DATE = range(10)
+START, MENU, EDIT, ADD, DELETE, VIEW, SEARCH, SEARCH_MENU, GET_TASK, GET_DATE, DATA, TIME = range(12)
 
 
 TIME_NOW = dt.now().strftime('%D_%H:%M')
@@ -38,12 +38,12 @@ def start(update, _):
     reply_keyboard = [['👀 VIEW', '📝 ADD','🔎 SEARCH', '❌ DELETE', '✍ EDIT', 'EXIT']]
     markup_key = ReplyKeyboardMarkup(
         reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-    bot.send_sticker(update.message.chat.id, welcome)
+    # bot.send_sticker(update.message.chat.id, welcome)
     bot.send_message(update.effective_chat.id,
                      f'Здраствуйте мастер {update.effective_user.first_name}, я Альфред, ваш персональный помощник')
 
     update.message.reply_text(
-        'Добро пожаловать в ToDoList. Чем займёмся? 🧐\nвведите ''/cancel'' для выхода', reply_markup=markup_key)
+        'Добро пожаловать в ToDoList. Чем займёмся? 🧐\n', reply_markup=markup_key)
     return MENU
 
 
@@ -72,7 +72,7 @@ def menu(update, _):
 def view(update, _):
     # user = update.message.from_user
     # logger.info("Контакт %s: %s", user.first_name, update.message.text)
-    bot.send_sticker(update.message.chat.id, view_sticker)
+    # bot.send_sticker(update.message.chat.id, view_sticker)
     bot.send_message(update.effective_chat.id,
                      f'Давайте-ка взглянем мастер {update.effective_user.first_name}')
     tasks = read_csv()
@@ -81,20 +81,39 @@ def view(update, _):
     return start(update, _)
 
 
-def add(update, _):
+def add(update, context):
+    user = update.message.from_user
+    logger.info("Task %s: %s", user.first_name, update.message.text)
+    name = update.message.text
+    context.user_data['name'] = name
+    update.message.reply_text("Введите дату в формате ДД/ММ/ГГ: ")
+    return DATA
+
+def data(update, context):
+    user = update.message.from_user
+    logger.info("Task %s: %s", user.first_name, update.message.text)
+    data = update.message.text
+    data += '_'
+    context.user_data['data'] = data
+    update.message.reply_text("Введите время в формате ЧЧ:ММ ")
+    return TIME
+
+def time(update, context):
     tasks = read_csv()
     task = {}
     user = update.message.from_user
     logger.info("Task %s: %s", user.first_name, update.message.text)
-    name = update.message.text
+    time = update.message.text
+    data = context.user_data.get('data') + time
+    name = context.user_data.get('name')
     task['Имя'] = user.first_name
     task['Фамилия'] = user.last_name
     task['Текущая дата'] = TIME_NOW
-    task['Дата выполнения'] = 'НУЖНО СДЕЛАТЬ'
+    task['Дата выполнения'] = data
     task['Задача'] = name
     tasks.append(task)
     o.write_csv(tasks)
-    return start(update, _)
+    return start(update, context)
 
 
 def search(update, _):
@@ -133,13 +152,6 @@ def edit(update, _):
     return start(update, _)
 
 
-def get_info(update, context):
-    print('1')
-    user = update.message.from_user
-    logger.info("Ввод данных %s: %s", user.first_name, update.message.text)
-    info = update.message.text
-    context.user_data['info'] = info
-    return 
 
 
 def cancel(update, _):
@@ -175,8 +187,8 @@ if __name__ == '__main__':
             SEARCH: [MessageHandler(Filters.text, search)],
             MENU: [MessageHandler(Filters.text, menu)],
             EDIT: [MessageHandler(Filters.text, edit)],
-           
-
+            DATA: [MessageHandler(Filters.text, data)],
+            TIME: [MessageHandler(Filters.text, time)],
         },
         # точка выхода из разговора
         fallbacks=[CommandHandler('cancel', cancel)],
