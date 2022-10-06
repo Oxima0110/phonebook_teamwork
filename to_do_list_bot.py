@@ -63,7 +63,9 @@ def menu(update, _):
         update.message.reply_text('Введите задачу сэр: ')
         return ADD
     if choice == '🔎 SEARCH':
-        update.message.reply_text("Поисковая строка: ")
+        bot.send_sticker(update.message.chat.id, st.listen)
+        bot.send_message(update.effective_chat.id,
+                     f'Что бы вы хотели найти, Мастер {update.effective_user.first_name}: ')
         return SEARCH
     if choice == '❌ DELETE':
         update.message.reply_text("Найти задачу для удаления: ")
@@ -100,17 +102,10 @@ def data(update, context):
     user = update.message.from_user
     logger.info("Task %s: %s", user.first_name, update.message.text)
     data = update.message.text
-    if len(data) == 8 and data[2] == '/' and data[5] == '/':
-        temp = data.replace('/', '')
-        if temp.isdigit():
-            data += '_'
-            context.user_data['data'] = data
-            update.message.reply_text("Введите время в формате ЧЧ:ММ ")
-            return TIME
-        else:
-            update.message.reply_text("Введите дату в формате ДД/ММ/ГГ: ")
-    else:
-        update.message.reply_text("Введите дату в формате ДД/ММ/ГГ: ")
+    data += '_'
+    context.user_data['data'] = data
+    update.message.reply_text("Сэр, Введите время в формате ЧЧ:ММ ")
+    return TIME
 
 def time(update, context):
     tasks = read_csv()
@@ -118,23 +113,20 @@ def time(update, context):
     user = update.message.from_user
     logger.info("Task %s: %s", user.first_name, update.message.text)
     time = update.message.text
-    if len(time) == 5 and time[2] == ':':
-        temp = time.replace(':', '')
-        if temp.isdigit():
-            data = context.user_data.get('data') + time
-            name = context.user_data.get('name')
-            task['Имя'] = user.first_name
-            task['Фамилия'] = user.last_name
-            task['Текущая дата'] = TIME_NOW
-            task['Дата выполнения'] = data
-            task['Задача'] = name
-            tasks.append(task)
-            o.write_csv(tasks)
-            return start(update, context)
-        else:
-            update.message.reply_text("Введите время в формате ЧЧ:ММ ")
-    else:
-        update.message.reply_text("Введите время в формате ЧЧ:ММ ")
+    data = context.user_data.get('data') + time
+    name = context.user_data.get('name')
+    task['Имя'] = user.first_name
+    task['Фамилия'] = user.last_name
+    task['Текущая дата'] = TIME_NOW
+    task['Дата выполнения'] = data
+    task['Задача'] = name
+    tasks.append(task)
+    o.write_csv(tasks)
+    bot.send_sticker(update.message.chat.id, st.complete)
+    bot.send_message(update.effective_chat.id,
+                    f'Мастер {update.effective_user.first_name}, задача успешно добавлена!:')
+    return show_menu(update, context)
+
 
 def search(update, _):
     user = update.message.from_user
@@ -148,7 +140,8 @@ def search(update, _):
     update.message.reply_text('🧐')
     tasks_string = o.view_tasks(searched_tasks)
     update.message.reply_text(tasks_string)
-    return start(update, _)
+
+    return show_menu(update, _)
 
     
 
